@@ -1,0 +1,101 @@
+http://www.ros.org/wiki/rosjava/Build
+
+1. roscreate-pkg packagename rosjava
+2. replace makefile with 
+include $(shell rospack find rosjava_bootstrap)/rosjava.mk
+
+3. create build.xml file with contents:
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="." default="default">
+
+  <property file="ros.properties" />
+  <property name="build" location="build" />
+
+  <property name="dist" location="dist" />
+  <property name="build" location="build" />
+  <property name="src" location="src" />
+  <property name="lib" location="lib" />
+  <property name = "compile.debug" value="true" />
+	
+<path id="classpath">
+    <pathelement path="${ros.compile.classpath}" />
+  </path>
+
+  <echo message="${toString:classpath}" />
+
+  <target name="default" depends="compile" />
+
+  <target name="init">
+    <fail unless="ros.compile.classpath" message="ros.properties is missing.  Please type 'rosmake' first "/>
+    <mkdir dir="${lib}" />    
+    <mkdir dir="${src}" />    
+    <mkdir dir="${build}" />
+    <mkdir dir="${dist}" />
+  </target>
+
+  <target name="compile" depends="init">
+
+    <javac destdir="${build}" debug="${compile.debug}" debuglevel="lines,vars,source">
+      <classpath refid="classpath" />
+      <src path="${src}" />
+    	
+    </javac>
+  </target>
+
+  <target name="clean">
+    <delete dir="${build}" />
+    <delete dir="${dist}" />
+  </target>
+
+  <!-- required entry point -->
+  <target name="test" />
+
+</project>
+
+
+4. modify manifest.xml to add dependencies and path to src folder
+<package>
+  <description brief="Jtest1">
+
+     Jtest1
+
+  </description>
+  <author>Sam Shteinman</author>
+  <license>BSD</license>
+  <review status="unreviewed" notes=""/>
+  <url>http://ros.org/wiki/Jtest1</url>
+  <depend package="rosjava"/>
+  <depend package="std_msgs" />
+
+<export>
+    <rosjava-src location="src" />
+ </export>
+
+</package>
+
+5. call rosmake packagename //this will create project for eclipse
+
+6. import project into eclipse
+
+7. Window-->Show View --> Ant  			//don't have to do
+
+8. Inside of Ant view, add build.xml		//don't have to do
+
+9. We can compile the project using compile in the Ant View	//don't have to do
+
+10. Right click project, Properties --> Builders --> Import  then select build.xml
+
+11. Uncheck Java Builder, make sure build.xml is checked
+
+12. Click on build.xml and click Edit
+
+13. In the Targets tab, select Auto Build's Set Targets and choose Compile and unselect Default
+(Now you can build project from eclipse)
+
+14. Debug As--> Java Applcation --> New_configuration
+
+15. choose Main class as org.ros.RosRun then go to argument tab and type the class's name.
+
+16. Right click on build.xml and choose Run As --> External Tools
+
+17. go to Properties, uncheck use global properties as specified in the Ant runtime preferences //may not have to do?) www.rohitprabhakar.com/2010/02/03/how-to-run-ant-build-from-eclipse/

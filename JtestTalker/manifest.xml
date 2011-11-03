@@ -1,0 +1,18 @@
+<package>
+  <description brief="JtestTalker">
+
+     JtestTalker
+
+  </description>
+  <author>Sam Shteinman</author>
+  <license>BSD</license>
+  <review status="unreviewed" notes=""/>
+  <url>http://ros.org/wiki/JtestTalker</url>
+  <depend package="rosjava"/>
+  <depend package="std_msgs" />
+
+<export>
+    <rosjava-src location="src" />
+ </export>
+
+</package>
